@@ -1,0 +1,65 @@
+#include <Arduino.h>
+
+// Структура вузла дерева
+struct Node {
+    float data;
+    Node *left, *right;
+};
+
+// Функція швидкого сортування (Quick Sort)
+void quickSort(float arr[], int left, int right) {
+    int i = left, j = right;
+    float tmp;
+    float pivot = arr[(left + right) / 2];
+    while (i <= j) {
+        while (arr[i] < pivot) i++;
+        while (arr[j] > pivot) j--;
+        if (i <= j) {
+            tmp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = tmp;
+            i++; j--;
+        }
+    }
+    if (left < j) quickSort(arr, left, j);
+    if (i < right) quickSort(arr, i, right);
+}
+
+// Функція вставки в дерево
+Node* insert(Node* root, float data) {
+    if (root == NULL) {
+        Node* temp = new Node;
+        temp->data = data;
+        temp->left = temp->right = NULL;
+        return temp;
+    }
+    if (data < root->data) root->left = insert(root->left, data);
+    else root->right = insert(root->right, data);
+    return root;
+}
+
+// --- ДОДАНІ ФУНКЦІЇ ДЛЯ ВИПРАВЛЕННЯ ПОМИЛКИ ---
+
+void setup() {
+    Serial.begin(115200);
+    delay(1000);
+    Serial.println("Програма запущена!");
+
+    // Приклад використання QuickSort
+    float numbers[] = {10.5, 2.3, 45.0, 12.1, 7.8};
+    int n = sizeof(numbers) / sizeof(numbers[0]);
+
+    Serial.println("Сортування масиву...");
+    quickSort(numbers, 0, n - 1);
+
+    for(int i = 0; i < n; i++) {
+        Serial.print(numbers[i]);
+        Serial.print(" ");
+    }
+    Serial.println("\nГотово.");
+}
+
+void loop() {
+    // Порожній цикл
+}
+
